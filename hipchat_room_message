@@ -61,5 +61,5 @@ INPUT=$(echo -n "${INPUT}" | perl -p -e "s/\n/<br \/>/g")
 # do the curl
 curl -sS \
   -H "Authorization: HipChat $TOKEN" \
-  -d "from=$FROM&message=$INPUT" \
-  http://api.hipchat.com/v1/rooms/message/$ROOM_ID.json
+  -d "room_id=$ROOM_ID&from=$FROM&message=$INPUT" \
+  http://api.hipchat.com/v1/rooms/message
