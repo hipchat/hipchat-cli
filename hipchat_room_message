@@ -60,6 +60,5 @@ INPUT=$(echo -n "${INPUT}" | sed "s/$/<br \/>/")
 
 # do the curl
 curl -sS \
-  -H "Authorization: HipChat $TOKEN" \
-  -d "room_id=$ROOM_ID&from=$FROM&message=$INPUT" \
+  -d "auth_token=$TOKEN&room_id=$ROOM_ID&from=$FROM&message=$INPUT" \
   http://api.hipchat.com/v1/rooms/message
