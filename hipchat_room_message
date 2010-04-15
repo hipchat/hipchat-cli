@@ -56,7 +56,7 @@ fi
 INPUT=$(cat)
 
 # replace newlines with XHTML <br />
-INPUT=$(echo -n "${INPUT}" | perl -p -e "s/\n/<br \/>/g")
+INPUT=$(echo -n "${INPUT}" | sed "s/$/<br \/>/")
 
 # do the curl
 curl -sS \
