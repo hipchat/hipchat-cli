@@ -25,10 +25,11 @@ This script will read from stdin and send the contents to the given room as
 a system message.
 
 OPTIONS:
-   -h  Show this message
-   -t  API token
-   -r  Room ID
-   -f  From name
+   -h             Show this message
+   -t <token>     API token
+   -r <room id>   Room ID
+   -f <from name> From name
+   -n             Trigger notification for people in the room
 EOF
 }
 
@@ -36,12 +37,14 @@ TOKEN=
 ROOM_ID=
 FROM=
 MESSAGE=
-while getopts “ht:r:f:” OPTION; do
+NOTIFY=0
+while getopts “ht:r:f:n” OPTION; do
   case $OPTION in
     h) usage; exit 1;;
     t) TOKEN=$OPTARG;;
     r) ROOM_ID=$OPTARG;;
     f) FROM=$OPTARG;;
+    n) NOTIFY=1;;
     [?]) usage; exit;;
   esac
 done
@@ -60,5 +63,5 @@ INPUT=$(echo -n "${INPUT}" | sed "s/$/<br \/>/")
 
 # do the curl
 curl -sS \
-  -d "auth_token=$TOKEN&room_id=$ROOM_ID&from=$FROM&message=$INPUT" \
+  -d "auth_token=$TOKEN&room_id=$ROOM_ID&from=$FROM&message=$INPUT&notify=$NOTIFY" \
   http://api.hipchat.com/v1/rooms/message
