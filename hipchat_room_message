@@ -5,9 +5,9 @@
 # ./hipchat_room_message
 #
 # A script for sending a system message to a room.
-# 
+#
 # Docs: http://github.com/hipchat/hipchat-cli
-# 
+#
 # Usage:
 #   cat message.txt | ./hipchat_room_message -t <token> -r 1234 -f "System"
 #   echo -e "New\nline" | ./hipchat_room_message -t <token> -r 1234 -f "System"
@@ -64,4 +64,4 @@ INPUT=$(echo -n "${INPUT}" | sed "s/$/<br \/>/")
 # do the curl
 curl -sS \
   -d "auth_token=$TOKEN&room_id=$ROOM_ID&from=$FROM&message=$INPUT&notify=$NOTIFY" \
-  http://api.hipchat.com/v1/rooms/message
+  https://api.hipchat.com/v1/rooms/message
