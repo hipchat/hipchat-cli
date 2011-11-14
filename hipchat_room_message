@@ -29,6 +29,7 @@ OPTIONS:
    -t <token>     API token
    -r <room id>   Room ID
    -f <from name> From name
+   -c <color>     Message color (yellow, red, green, purple or random - default: yellow)
    -n             Trigger notification for people in the room
 EOF
 }
@@ -36,14 +37,16 @@ EOF
 TOKEN=
 ROOM_ID=
 FROM=
+COLOR=
 MESSAGE=
 NOTIFY=0
-while getopts “ht:r:f:n” OPTION; do
+while getopts “ht:r:f:c:n” OPTION; do
   case $OPTION in
     h) usage; exit 1;;
     t) TOKEN=$OPTARG;;
     r) ROOM_ID=$OPTARG;;
     f) FROM=$OPTARG;;
+    c) COLOR=$OPTARG;;
     n) NOTIFY=1;;
     [?]) usage; exit;;
   esac
@@ -63,5 +66,5 @@ INPUT=$(echo -n "${INPUT}" | sed "s/$/<br \/>/")
 
 # do the curl
 curl -sS \
-  -d "auth_token=$TOKEN&room_id=$ROOM_ID&from=$FROM&message=$INPUT&notify=$NOTIFY" \
+  -d "auth_token=$TOKEN&room_id=$ROOM_ID&from=$FROM&color=$COLOR&message=$INPUT&notify=$NOTIFY" \
   https://api.hipchat.com/v1/rooms/message
