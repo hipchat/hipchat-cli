@@ -64,6 +64,9 @@ INPUT=$(cat)
 # replace newlines with XHTML <br />
 INPUT=$(echo -n "${INPUT}" | sed "s/$/<br \/>/")
 
+# urlescape with perl
+INPUT=$(echo -n "${INPUT}" | perl -p -e 's/([^A-Za-z0-9])/sprintf("%%%02X", ord($1))/seg')
+
 # do the curl
 curl -sS \
   -d "auth_token=$TOKEN&room_id=$ROOM_ID&from=$FROM&color=$COLOR&message=$INPUT&notify=$NOTIFY" \
