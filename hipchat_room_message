@@ -67,6 +67,9 @@ INPUT=$(echo -n "${INPUT}" | sed "s/$/<br \/>/")
 # urlescape with perl
 INPUT=$(echo -n "${INPUT}" | perl -p -e 's/([^A-Za-z0-9])/sprintf("%%%02X", ord($1))/seg')
 
+# replace URLs with real hyperlinks - c3w
+INPUT=$(echo -n "${INPUT}" | sed "s/\([a-zA-Z]*\:\/\/[^ ]*\)\(.*\)/\<a href=\"\1\"\>\1\<\/a\>\2/")
+
 # do the curl
 curl -sS \
   -d "auth_token=$TOKEN&room_id=$ROOM_ID&from=$FROM&color=$COLOR&message=$INPUT&notify=$NOTIFY" \
