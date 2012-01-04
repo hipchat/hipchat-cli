@@ -31,6 +31,7 @@ OPTIONS:
    -f <from name> From name
    -c <color>     Message color (yellow, red, green, purple or random - default: yellow)
    -n             Trigger notification for people in the room
+   -o             API host (api.hipchat.com)
 EOF
 }
 
@@ -40,7 +41,8 @@ FROM=
 COLOR=
 MESSAGE=
 NOTIFY=0
-while getopts “ht:r:f:c:n” OPTION; do
+HOST='api.hipchat.com'
+while getopts “ht:r:f:c:o:n” OPTION; do
   case $OPTION in
     h) usage; exit 1;;
     t) TOKEN=$OPTARG;;
@@ -48,6 +50,7 @@ while getopts “ht:r:f:c:n” OPTION; do
     f) FROM=$OPTARG;;
     c) COLOR=$OPTARG;;
     n) NOTIFY=1;;
+    o) HOST=$OPTARG;;
     [?]) usage; exit;;
   esac
 done
@@ -73,4 +76,4 @@ INPUT=$(echo -n "${INPUT}" | sed "s/\([a-zA-Z]*\:\/\/[^ ]*\)\(.*\)/\<a href=\"\1
 # do the curl
 curl -sS \
   -d "auth_token=$TOKEN&room_id=$ROOM_ID&from=$FROM&color=$COLOR&message=$INPUT&notify=$NOTIFY" \
-  https://api.hipchat.com/v1/rooms/message
+  https://$HOST/v1/rooms/message
