@@ -119,14 +119,19 @@ if [ $API == 'v2' ]; then
   fi
 fi
 
-# do the curl
+# do the curl, using a temporary filename
+# (stored in BODY) to avoid long URL errors
+BODY=`mktemp`
+
 if [ $API == 'v2' ]; then
+  echo "{\"color\":\"$COLOR\", \"message\":\"$INPUT\", \"message_format\":\"$FORMAT\", \"notify\":$NOTIFY}" > $BODY
   curl -sS \
     -H 'Content-type: application/json' \
-    -d "{\"color\":\"$COLOR\", \"message\":\"$INPUT\", \"message_format\":\"$FORMAT\", \"notify\":$NOTIFY}" \
+    -d @$BODY \
     https://$HOST/v2/room/$ROOM_ID/notification?auth_token=$TOKEN
 else
+  echo "auth_token=$TOKEN&room_id=$ROOM_ID&from=$FROM&color=$COLOR&message_format=$FORMAT&message=$INPUT&notify=$NOTIFY" > $BODY
   curl -sS \
-    -d "auth_token=$TOKEN&room_id=$ROOM_ID&from=$FROM&color=$COLOR&message_format=$FORMAT&message=$INPUT&notify=$NOTIFY" \
+    -d @$BODY \
     https://$HOST/v1/rooms/message
 fi
