@@ -30,6 +30,7 @@ OPTIONS:
    -r <room id>   Room ID
    -f <from name> From name
    -c <color>     Message color (yellow, red, green, purple or random - default: yellow)
+   -m <format>    Message format (html or text - default: html)
    -n             Trigger notification for people in the room
    -o             API host (api.hipchat.com)
 EOF
@@ -39,16 +40,18 @@ TOKEN=
 ROOM_ID=
 FROM=
 COLOR=
+FORMAT='html'
 MESSAGE=
 NOTIFY=0
 HOST='api.hipchat.com'
-while getopts “ht:r:f:c:o:n” OPTION; do
+while getopts “ht:r:f:c:m:o:n” OPTION; do
   case $OPTION in
     h) usage; exit 1;;
     t) TOKEN=$OPTARG;;
     r) ROOM_ID=$OPTARG;;
     f) FROM=$OPTARG;;
     c) COLOR=$OPTARG;;
+    m) FORMAT=$OPTARG;;
     n) NOTIFY=1;;
     o) HOST=$OPTARG;;
     [?]) usage; exit;;
@@ -65,7 +68,9 @@ fi
 INPUT=$(cat)
 
 # replace newlines with XHTML <br>
-INPUT=$(echo -n "${INPUT}" | sed "s/$/\<br\>/")
+if [ $FORMAT == 'html' ]; then
+    INPUT=$(echo -n "${INPUT}" | sed "s/$/\<br\>/")
+fi
 
 # replace bare URLs with real hyperlinks
 INPUT=$(echo -n "${INPUT}" | perl -p -e "s/(?<!href=\")((?:https?|ftp|mailto)\:\/\/[^ \n]*)/\<a href=\"\1\"\>\1\<\/a>/g")
@@ -75,5 +80,5 @@ INPUT=$(echo -n "${INPUT}" | perl -p -e 's/([^A-Za-z0-9])/sprintf("%%%02X", ord(
 
 # do the curl
 curl -sS \
-  -d "auth_token=$TOKEN&room_id=$ROOM_ID&from=$FROM&color=$COLOR&message=$INPUT&notify=$NOTIFY" \
+  -d "auth_token=$TOKEN&room_id=$ROOM_ID&from=$FROM&color=$COLOR&message_format=$FORMAT&message=$INPUT&notify=$NOTIFY" \
   https://$HOST/v1/rooms/message
