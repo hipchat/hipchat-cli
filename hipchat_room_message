@@ -36,14 +36,14 @@ OPTIONS:
 EOF
 }
 
-TOKEN=
-ROOM_ID=
-FROM=
-COLOR=
-FORMAT='html'
-MESSAGE=
-NOTIFY=0
-HOST='api.hipchat.com'
+TOKEN=${TOKEN:-}
+ROOM_ID=${ROOM_ID:-}
+FROM=${FROM:-}
+COLOR=${COLOR:-}
+FORMAT=${FORMAT:-html}
+MESSAGE=${MESSAGE:-html}
+NOTIFY=${NOTIFY:-0}
+HOST=${HOST:-api.hipchat.com}
 while getopts “ht:r:f:c:m:o:n” OPTION; do
   case $OPTION in
     h) usage; exit 1;;
