@@ -36,6 +36,9 @@ OPTIONS:
 EOF
 }
 
+# Include hipchat defaults if available
+test -f /etc/hipchat && . /etc/hipchat
+
 TOKEN=${HIPCHAT_TOKEN:-}
 ROOM_ID=${HIPCHAT_ROOM_ID:-}
 FROM=${HIPCHAT_FROM:-}
