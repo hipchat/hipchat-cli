@@ -31,6 +31,7 @@ OPTIONS:
    -f <from name> From name
    -c <color>     Message color (yellow, red, green, purple or random - default: yellow)
    -m <format>    Message format (html or text - default: html)
+   -i <input>     Optional: Input to send to room (default: stdin)
    -n             Trigger notification for people in the room
    -o             API host (api.hipchat.com)
 EOF
@@ -47,7 +48,7 @@ FORMAT=${HIPCHAT_FORMAT:-html}
 MESSAGE=${HIPCHAT_MESSAGE:-html}
 NOTIFY=${HIPCHAT_NOTIFY:-0}
 HOST=${HIPCHAT_HOST:-api.hipchat.com}
-while getopts “ht:r:f:c:m:o:n” OPTION; do
+while getopts “ht:r:f:c:m:o:i:n” OPTION; do
   case $OPTION in
     h) usage; exit 1;;
     t) TOKEN=$OPTARG;;
@@ -56,6 +57,7 @@ while getopts “ht:r:f:c:m:o:n” OPTION; do
     c) COLOR=$OPTARG;;
     m) FORMAT=$OPTARG;;
     n) NOTIFY=1;;
+	i) INPUT=$OPTARG;;
     o) HOST=$OPTARG;;
     [?]) usage; exit;;
   esac
@@ -67,8 +69,10 @@ if [[ -z $TOKEN ]] || [[ -z $ROOM_ID ]] || [[ -z $FROM ]]; then
   exit 1
 fi
 
-# read stdin
-INPUT=$(cat)
+if [ -z "$INPUT" ]; then
+  # read stdin
+  INPUT=$(cat)
+fi
 
 # replace newlines with XHTML <br>
 if [ $FORMAT == 'html' ]; then
