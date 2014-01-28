@@ -39,6 +39,8 @@ OPTIONS:
    -f <from name> From name
    -c <color>     Message color (yellow, red, green, purple or random - default: yellow)
    -m <format>    Message format (html or text - default: html)
+   -i <input>     Message to send to room, allows you to specify input via command line instead of stdin
+   -l <level>     Supports critical, warning, unknown, ok -- overrides color input (red, yellow, gray, green)
    -n             Trigger notification for people in the room (default: 0)
    -o             API host (api.hipchat.com)
 ```
@@ -56,6 +58,7 @@ HIPCHAT_COLOR        | Message color (yellow, red, green, purple or random - def
 HIPCHAT_FORMAT       | Message format (html or text - default: html)
 HIPCHAT_NOTIFY       | Trigger notification for people in the room (default: 0)
 HIPCHAT_HOST         | API host (api.hipchat.com)
+HIPCHAT_LEVEL        | Message Level (targetting Nagios states, critical, warning, unknown, ok)
 
 #### Usage example:
 ```bash

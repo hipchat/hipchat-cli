@@ -32,6 +32,7 @@ OPTIONS:
    -c <color>     Message color (yellow, red, green, purple or random - default: yellow)
    -m <format>    Message format (html or text - default: html)
    -i <input>     Optional: Input to send to room (default: stdin)
+   -l <level>     Message Level (critical, warning, unknown, ok) - These map to colors (red, yellow, gray, green)
    -n             Trigger notification for people in the room
    -o             API host (api.hipchat.com)
 EOF
@@ -48,7 +49,8 @@ FORMAT=${HIPCHAT_FORMAT:-html}
 MESSAGE=${HIPCHAT_MESSAGE:-html}
 NOTIFY=${HIPCHAT_NOTIFY:-0}
 HOST=${HIPCHAT_HOST:-api.hipchat.com}
-while getopts “ht:r:f:c:m:o:i:n” OPTION; do
+LEVEL=${HIPCHAT_LEVEL:-}
+while getopts “ht:r:f:c:m:o:i:l:n” OPTION; do
   case $OPTION in
     h) usage; exit 1;;
     t) TOKEN=$OPTARG;;
@@ -57,7 +59,8 @@ while getopts “ht:r:f:c:m:o:i:n” OPTION; do
     c) COLOR=$OPTARG;;
     m) FORMAT=$OPTARG;;
     n) NOTIFY=1;;
-	i) INPUT=$OPTARG;;
+    i) INPUT=$OPTARG;;
+    l) LEVEL=$OPTARG;;
     o) HOST=$OPTARG;;
     [?]) usage; exit;;
   esac
@@ -67,6 +70,18 @@ done
 if [[ -z $TOKEN ]] || [[ -z $ROOM_ID ]] || [[ -z $FROM ]]; then
   usage
   exit 1
+fi
+
+if [ ! -z "$LEVEL" ]; then
+	if [[ $LEVEL == 'CRITICAL' ]] || [[ $LEVEL == 'critical' ]]; then
+    COLOR="red";
+  elif [[ $LEVEL == 'WARNING' ]] || [[ $LEVEL == 'warning' ]]; then
+    COLOR="yellow";
+  elif [[ $LEVEL == 'UNKNOWN' ]] || [[ $LEVEL == 'unknown' ]]; then
+    COLOR="gray";
+  elif [[ $LEVEL == 'OK' ]] || [[ $LEVEL == 'ok' ]]; then
+    COLOR="green";
+  fi
 fi
 
 if [ -z "$INPUT" ]; then
