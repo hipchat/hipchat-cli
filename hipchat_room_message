@@ -32,7 +32,7 @@ OPTIONS:
    -c <color>     Message color (yellow, red, green, purple or random - default: yellow)
    -m <format>    Message format (html or text - default: html)
    -i <input>     Optional: Input to send to room (default: stdin)
-   -l <level>     Message Level (critical, warning, unknown) - These map to colors (red, yellow, orange, green)
+   -l <level>     Message Level (critical, warning, unknown, ok) - These map to colors (red, yellow, gray, green)
    -n             Trigger notification for people in the room
    -o             API host (api.hipchat.com)
 EOF
