@@ -32,7 +32,7 @@ OPTIONS:
    -c <color>     Message color (yellow, red, green, purple or random - default: yellow)
    -m <format>    Message format (html or text - default: html)
    -i <input>     Optional: Input to send to room (default: stdin)
-   -l <level>     Message Level (critical, warning, unknown, ok) - These map to colors (red, yellow, gray, green)
+   -l <level>     Nagios message level (critical, warning, unknown, ok, down, up). Will override color.
    -n             Trigger notification for people in the room
    -o             API host (api.hipchat.com)
 EOF
@@ -72,14 +72,19 @@ if [[ -z $TOKEN ]] || [[ -z $ROOM_ID ]] || [[ -z $FROM ]]; then
   exit 1
 fi
 
+# nagios levels
 if [ ! -z "$LEVEL" ]; then
-	if [[ $LEVEL == 'CRITICAL' ]] || [[ $LEVEL == 'critical' ]]; then
+  if [[ $LEVEL == 'CRITICAL' ]] || [[ $LEVEL == 'critical' ]]; then
     COLOR="red";
   elif [[ $LEVEL == 'WARNING' ]] || [[ $LEVEL == 'warning' ]]; then
     COLOR="yellow";
   elif [[ $LEVEL == 'UNKNOWN' ]] || [[ $LEVEL == 'unknown' ]]; then
     COLOR="gray";
   elif [[ $LEVEL == 'OK' ]] || [[ $LEVEL == 'ok' ]]; then
+    COLOR="green";
+  elif [[ $LEVEL == 'DOWN' ]] || [[ $LEVEL == 'down' ]]; then
+    COLOR="red";
+  elif [[ $LEVEL == 'UP' ]] || [[ $LEVEL == 'up' ]]; then
     COLOR="green";
   fi
 fi
