@@ -35,6 +35,7 @@ OPTIONS:
    -l <level>     Nagios message level (critical, warning, unknown, ok, down, up). Will override color.
    -n             Trigger notification for people in the room
    -o             API host (api.hipchat.com)
+   -v <version>   API version (default: v1)
 EOF
 }
 
@@ -50,7 +51,8 @@ MESSAGE=${HIPCHAT_MESSAGE:-html}
 NOTIFY=${HIPCHAT_NOTIFY:-0}
 HOST=${HIPCHAT_HOST:-api.hipchat.com}
 LEVEL=${HIPCHAT_LEVEL:-}
-while getopts “ht:r:f:c:m:o:i:l:n” OPTION; do
+API=${HIPCHAT_API:-v1}
+while getopts “ht:r:f:c:m:o:i:l:v:n” OPTION; do
   case $OPTION in
     h) usage; exit 1;;
     t) TOKEN=$OPTARG;;
@@ -62,6 +64,7 @@ while getopts “ht:r:f:c:m:o:i:l:n” OPTION; do
     i) INPUT=$OPTARG;;
     l) LEVEL=$OPTARG;;
     o) HOST=$OPTARG;;
+    v) API=$OPTARG;;
     [?]) usage; exit;;
   esac
 done
@@ -105,7 +108,23 @@ INPUT=$(echo -n "${INPUT}" | perl -p -e "s/(?<!href=\"|href=')((?:https?|ftp|mai
 # urlencode with perl
 INPUT=$(echo -n "${INPUT}" | perl -p -e 's/([^A-Za-z0-9])/sprintf("%%%02X", ord($1))/seg')
 
+# replace notification boolean from 1/0 to 'true'/'false' for API v2
+if [ $API == 'v2' ]; then
+  if [ $NOTIFY -eq 0 ]; then
+    NOTIFY='false'
+  else
+    NOTIFY='true'
+  fi
+fi
+
 # do the curl
-curl -sS \
-  -d "auth_token=$TOKEN&room_id=$ROOM_ID&from=$FROM&color=$COLOR&message_format=$FORMAT&message=$INPUT&notify=$NOTIFY" \
-  https://$HOST/v1/rooms/message
+if [ $API == 'v2' ]; then
+  curl -sS \
+    -H 'Content-type: application/json' \
+    -d "{\"color\":\"$COLOR\", \"message\":\"$INPUT\", \"message_format\":\"$FORMAT\", \"notify\":$NOTIFY}" \
+    https://$HOST/v2/room/$ROOM_ID/notification?auth_token=$TOKEN
+else
+  curl -sS \
+    -d "auth_token=$TOKEN&room_id=$ROOM_ID&from=$FROM&color=$COLOR&message_format=$FORMAT&message=$INPUT&notify=$NOTIFY" \
+    https://$HOST/v1/rooms/message
+fi

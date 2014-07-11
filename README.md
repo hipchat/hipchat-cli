@@ -43,6 +43,7 @@ OPTIONS:
    -l <level>     Nagios message level (critical, warning, unknown, ok, down, up). Will override color.
    -n             Trigger notification for people in the room (default: 0)
    -o             API host (api.hipchat.com)
+   -v <version>   API version (default: v1)
 ```
 
 ### Environment variables
@@ -59,6 +60,7 @@ HIPCHAT_FORMAT       | Message format (html or text - default: html)
 HIPCHAT_NOTIFY       | Trigger notification for people in the room (default: 0)
 HIPCHAT_HOST         | API host (api.hipchat.com)
 HIPCHAT_LEVEL        | Message Level (targetting Nagios states, critical, warning, unknown, ok)
+HIPCHAT_API          | API version (default: v1)
 
 #### Usage example:
 ```bash
