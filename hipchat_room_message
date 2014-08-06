@@ -71,6 +71,15 @@ done
 
 # check for required args
 if [[ -z $TOKEN ]] || [[ -z $ROOM_ID ]] || [[ -z $FROM ]]; then
+  if [[ -z $TOKEN ]]; then
+    echo "$(basename $0): missing TOKEN"
+  fi
+  if [[ -z $ROOM_ID ]]; then
+    echo "$(basename $0): missing ROOM_ID"
+  fi
+  if [[ -z $FROM ]]; then
+    echo "$(basename $0): missing FROM"
+  fi
   usage
   exit 1
 fi
