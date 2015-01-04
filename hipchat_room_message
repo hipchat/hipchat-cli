@@ -43,7 +43,7 @@ EOF
 
 # Include hipchat defaults if available
 test -f /etc/hipchat && . /etc/hipchat
-test -f ~/.hipchat && .~/.hipchat
+test -f ~/.hipchat && . ~/.hipchat
 
 TOKEN=${HIPCHAT_TOKEN:-}
 ROOM_ID=${HIPCHAT_ROOM_ID:-}
