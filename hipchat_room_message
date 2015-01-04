@@ -16,13 +16,15 @@
 
 # exit on failure
 set -e
+# http://apple.stackexchange.com/questions/68684/why-sh-c-echo-n-1-is-different-from-bash-c-echo-n-1
+shopt -u xpg_echo
 
 usage() {
   cat << EOF
 Usage: $0 -t <token> -r <room id> -f <from name>
 
 This script will read from stdin and send the contents to the given room as
-a system message.
+a system message. Or use -i message.
 
 OPTIONS:
    -h             Show this message
@@ -41,6 +43,7 @@ EOF
 
 # Include hipchat defaults if available
 test -f /etc/hipchat && . /etc/hipchat
+test -f ~/.hipchat && .~/.hipchat
 
 TOKEN=${HIPCHAT_TOKEN:-}
 ROOM_ID=${HIPCHAT_ROOM_ID:-}
