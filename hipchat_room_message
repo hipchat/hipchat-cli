@@ -123,8 +123,9 @@ fi
 if [ $API == 'v2' ]; then
   curl -sS \
     -H 'Content-type: application/json' \
+    -H "Authorization: Bearer $TOKEN" \
     -d "{\"color\":\"$COLOR\", \"message\":\"$INPUT\", \"message_format\":\"$FORMAT\", \"notify\":$NOTIFY}" \
-    https://$HOST/v2/room/$ROOM_ID/notification?auth_token=$TOKEN
+    https://$HOST/v2/room/$ROOM_ID/notification
 else
   curl -sS \
     -d "auth_token=$TOKEN&room_id=$ROOM_ID&from=$FROM&color=$COLOR&message_format=$FORMAT&message=$INPUT&notify=$NOTIFY" \
