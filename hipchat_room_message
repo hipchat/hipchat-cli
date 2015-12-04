@@ -99,7 +99,7 @@ fi
 
 # replace newlines with XHTML <br>
 if [ $FORMAT == 'html' ]; then
-    INPUT=$(echo -n "${INPUT}" | sed "s/$/\<br\>/")
+    INPUT=$(echo -n "${INPUT}" | perl -p -e 's/\n/<br \/>/')
 fi
 
 # replace bare URLs with real hyperlinks
