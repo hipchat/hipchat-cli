@@ -36,6 +36,7 @@ OPTIONS:
    -n             Trigger notification for people in the room
    -o             API host (api.hipchat.com)
    -v <version>   API version (default: v1)
+   -k             Allow curl to make insecure SSL connections
 EOF
 }
 
@@ -52,7 +53,9 @@ NOTIFY=${HIPCHAT_NOTIFY:-0}
 HOST=${HIPCHAT_HOST:-api.hipchat.com}
 LEVEL=${HIPCHAT_LEVEL:-}
 API=${HIPCHAT_API:-v1}
-while getopts “ht:r:f:c:m:o:i:l:v:n” OPTION; do
+ALLOW_INSECURE=false
+
+while getopts "ht:r:f:c:m:o:i:l:v:nk" OPTION; do
   case $OPTION in
     h) usage; exit 1;;
     t) TOKEN=$OPTARG;;
@@ -65,6 +68,7 @@ while getopts “ht:r:f:c:m:o:i:l:v:n” OPTION; do
     l) LEVEL=$OPTARG;;
     o) HOST=$OPTARG;;
     v) API=$OPTARG;;
+    k) ALLOW_INSECURE=true;;
     [?]) usage; exit;;
   esac
 done
@@ -124,20 +128,25 @@ if [ $API == 'v2' ]; then
   fi
 fi
 
+curl_opts="-sS"
+if [ $ALLOW_INSECURE == true ]; then
+    curl_opts+=" --insecure"
+fi
+
 # do the curl, using a temporary filename
 # (stored in BODY) to avoid long URL errors
 BODY=`mktemp`
 
 if [ $API == 'v2' ]; then
     echo "{\"color\":\"$COLOR\", \"from\": \"$FROM\", \"message\":\"$INPUT\", \"message_format\":\"$FORMAT\", \"notify\":$NOTIFY}" > $BODY
-  curl -sS \
+  curl ${curl_opts} \
     -H 'Content-type: application/json' \
     -H "Authorization: Bearer $TOKEN" \
     -d @$BODY \
     https://$HOST/v2/room/$ROOM_ID/notification
 else
   echo "auth_token=$TOKEN&room_id=$ROOM_ID&from=$FROM&color=$COLOR&message_format=$FORMAT&message=$INPUT&notify=$NOTIFY" > $BODY
-  curl -sS \
+  curl ${curl_opts} \
     -d @$BODY \
     https://$HOST/v1/rooms/message
 fi
