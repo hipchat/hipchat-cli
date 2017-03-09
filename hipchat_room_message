@@ -123,7 +123,7 @@ fi
 if [ $API == 'v2' ]; then
   curl -sS \
     -H 'Content-type: application/json' \
-    -d "{\"color\":\"$COLOR\", \"message\":\"$INPUT\", \"message_format\":\"$FORMAT\", \"notify\":$NOTIFY}" \
+        -d "{\"color\":\"$COLOR\", \"from\": \"$FROM\", \"message\":\"$INPUT\", \"message_format\":\"$FORMAT\", \"notify\":$NOTIFY}" \
     https://$HOST/v2/room/$ROOM_ID/notification?auth_token=$TOKEN
 else
   curl -sS \
