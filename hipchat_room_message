@@ -110,6 +110,11 @@ if [ $API == 'v1' ]; then
   INPUT=$(echo -n "${INPUT}" | perl -p -e 's/([^A-Za-z0-9])/sprintf("%%%02X", ord($1))/seg')
 fi
 
+# escape special characters in json
+if [ $API == 'v2' ]; then
+  INPUT=$(echo -n "${INPUT}" | sed 's/\\/\\\\/g' | sed 's/"/\\\"/g')
+fi
+
 # replace notification boolean from 1/0 to 'true'/'false' for API v2
 if [ $API == 'v2' ]; then
   if [ $NOTIFY -eq 0 ]; then
