@@ -77,14 +77,14 @@ while getopts "ht:r:f:c:m:o:i:l:v:nk" OPTION; do
 done
 
 # check for required args
-if [[ -z $TOKEN ]] || [[ -z $ROOM_ID ]] || [[ -z $FROM ]]; then
+if [[ -z $TOKEN ]] || [[ -z $ROOM_ID ]] || [[ -z $FROM && $API = "v1" ]]; then
   if [[ -z $TOKEN ]]; then
     echo "$(basename $0): missing TOKEN"
   fi
   if [[ -z $ROOM_ID ]]; then
     echo "$(basename $0): missing ROOM_ID"
   fi
-  if [[ -z $FROM ]]; then
+  if [[ -z $FROM && $API = "v1" ]]; then
     echo "$(basename $0): missing FROM"
   fi
   usage
@@ -150,7 +150,13 @@ fi
 BODY=`mktemp`
 
 if [ $API == 'v2' ]; then
-    echo "{\"color\":\"$COLOR\", \"from\": \"$FROM\", \"message\":\"$INPUT\", \"message_format\":\"$FORMAT\", \"notify\":$NOTIFY}" > $BODY
+    (echo "{\"color\":\"$COLOR\", "
+
+     if [[ -n "$FROM" ]] ; then
+         echo "\"from\": \"$FROM\", "
+     fi
+     echo "\"message\":\"$INPUT\", \"message_format\":\"$FORMAT\", \"notify\":$NOTIFY}"
+    ) > $BODY
   curl ${curl_opts} \
     -H 'Content-type: application/json' \
     -H "Authorization: Bearer $TOKEN" \
