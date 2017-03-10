@@ -30,11 +30,13 @@ OPTIONS:
    -h             Show this message
    -t <token>     API token
    -r <room id>   Room ID
-   -f <from name> From name
-   -c <color>     Message color (yellow, red, green, purple or random - default: yellow)
+   -f <from name> From name (optional in v2 API)
+   -c <color>     Message color (yellow, red, green, purple, gray
+                                 or random - default: yellow)
    -m <format>    Message format (html or text - default: html)
    -i <input>     Optional: Input to send to room (default: stdin)
-   -l <level>     Nagios message level (critical, warning, unknown, ok, down, up). Will override color.
+   -l <level>     Nagios message level (critical, warning, unknown,
+                                        ok, down, up).  Will override color.
    -n             Trigger notification for people in the room
    -o             API host (api.hipchat.com)
    -v <version>   API version (default: v1)
