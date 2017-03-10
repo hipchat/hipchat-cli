@@ -121,7 +121,7 @@ if [ $FORMAT == 'html' ]; then
 fi
 
 # replace bare URLs with real hyperlinks
-INPUT=$(echo -n "${INPUT}" | perl -p -e "s/(?<!href=\"|href=')((?:https?|ftp|mailto)\:\/\/[^ \n]*)/\<a href=\"\1\"\>\1\<\/a>/g")
+INPUT=$(echo -n "${INPUT}" | perl -p -e "s/(?<!href=\"|href='| src=\"| src=')((?:https?|ftp|mailto)\:\/\/[^ \n]*)/\<a href=\"\1\"\>\1\<\/a>/g")
 
 # urlencode with perl
 if [ $API == 'v1' ]; then
