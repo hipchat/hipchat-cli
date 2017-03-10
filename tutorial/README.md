@@ -86,7 +86,7 @@ a little fancier.
 
 The `-c` option sets the background color of the message:
 
-    echo Something is amiss | ./hipchat_room_message -c red
+    ./hipchat_room_message -c red -i "Something is amiss"
 
 ![Amiss Message](image/09-amiss.png)
 
