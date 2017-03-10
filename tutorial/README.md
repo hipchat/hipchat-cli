@@ -5,6 +5,14 @@ Here is a step-by-step tutorial on how to use this command-line
 tool to integration with [HipChat][hc].  This tutorial only
 describes `v2` access.
 
+* [Obtaining an Access Token](#obtaining-an-access-token)
+* [Obtaining a Room API ID](#obtaining-a-room-api-id)
+* [Sending Messages](#sending-messages)
+  * [Getting Fancy](#getting-fancy)
+    * [Color](#color)
+    * [From](#from)
+    * [Inline Markup](#inline-markup)
+
 ## Obtaining an Access Token
 
 In order to talk to the hipchat servers, you will require an access
@@ -84,7 +92,7 @@ The `-c` option sets the background color of the message:
 
 #### From
 
-You can use the **from** option (`-f) to mark your message as
+You can use the **from** option (`-f`) to mark your message as
 being from a particular place.
 
     echo Work with your destiny. Stop trying to outrun it. | \
@@ -92,11 +100,13 @@ being from a particular place.
 
 ![Fortune Cookie Message](image/10-fortune.png)
 
-#### Inline markup
+#### Inline Markup
 
-The message body supports HTML-style inline markup.
+And, the message body supports HTML-style inline markup.
 
     echo '<b>Scorpio:</b> <i>Carpe diem!</i>' | \
       ./hipchat_room_message -c green -f "Fortune Cookie"
+
+![Inline Markup](image/11-inline-markup.png)
 
 [hc]: http://www.hipchat.com
