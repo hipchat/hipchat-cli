@@ -170,3 +170,5 @@ else
     -d @$BODY \
     https://$HOST/v1/rooms/message
 fi
+
+rm -f $BODY
